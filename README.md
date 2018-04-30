@@ -8,7 +8,7 @@ In order to reproduce my results, you will need to install Caffe2 and Detectron.
 
 
 
-The dataset and model files are uploaded to my IU Box, and you can download them from here.
+The dataset and model files are uploaded to my IU Box, and you can download them from [here](https://iu.box.com/s/13npqzwecxq6g1l5ayutxvbu0p9znmd1).
 When download is complete, please move all file under the directory to '/lib/datasets/data/egohands_data'
 
 ## I'm listing all the codes I have contributed to the repo:
