@@ -185,5 +185,176 @@ DATASETS = {
             _DATA_DIR + '/VOC2012/annotations/voc_2012_trainval.json',
         DEVKIT_DIR:
             _DATA_DIR + '/VOC2012/VOCdevkit2012'
+    },
+    'ego_data_train':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Train',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_train.json'
+    },
+    'ego_data_val':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Valid',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_valid.json'
+    },
+    'ego_data_test':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Test',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_test.json'
+    },
+    
+    'ego_data_train_act_box':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Train_mask_gray_new',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_train_act.json'
+    },
+    'ego_data_val_act_box':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Valid_mask_gray_new',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_valid_act.json'
+    },
+    'ego_data_test_act_box':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Test_mask_gray_new',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_test_act.json'
+    },
+    
+    
+    'ego_data_train_act_union':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Train_mask_gray_new',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_train_mask.json'
+    },
+    'ego_data_val_act_union':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Valid_mask_gray_new',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_valid_mask.json'
+    },
+    'ego_data_test_act_union':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Test_mask_gray_new',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_test_mask.json'
+    },
+    
+    'ego_data_train_act_union_new':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Train_mask_gray_new',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_train_mask.json'
+    },
+    'ego_data_val_act_union_new':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Valid_mask_gray_new',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_valid_mask.json'
+    },
+    'ego_data_test_act_union_new':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Test_mask_gray_new',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_test_mask.json'
+    },
+    
+    
+    'ego_data_train_act_box_union':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Train_mask_gray_new',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_train_act_box_union.json'
+    },
+    'ego_data_val_act_box_union':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Valid_mask_gray_new',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_valid_act_box_union.json'
+    },
+    'ego_data_test_act_box_union':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Test_mask_gray_new',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_test_act_box_union.json'
+    },
+    
+    
+	'ego_data_train_act_union_ori':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Train',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_train_mask.json'
+    },
+    'ego_data_val_act_union_ori':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Valid',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_valid_mask.json'
+    },
+    'ego_data_test_act_union_ori':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Test',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_test_mask.json'
+    },
+    
+    'ego_data_train_act_box_ori':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Train',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_train_act.json'
+    },
+    'ego_data_val_act_box_ori':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Valid',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_valid_act.json'
+    },
+    'ego_data_test_act_box_ori':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Test',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_test_act.json'
+    },
+    
+    'ego_data_train_act_box_union_ori':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Train',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_train_act_box_union.json'
+    },
+    'ego_data_val_act_box_union_ori':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Valid',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_valid_act_box_union.json'
+    },
+    'ego_data_test_act_box_union_ori':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/Test',
+	ANN_FN:
+	    _DATA_DIR + '/egohands_data/annotation/ego_annotation_test_act_box_union.json'
+    },
+    
+    
+    'cards_office_B_S':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/cards_office_B_S',
+	ANN_FN:
+	    _DATA_DIR + 'none'
+    },
+    'chess_courtyard_H_S':{
+	IM_DIR:
+	    _DATA_DIR + '/egohands_data/chess_courtyard_H_S',
+	ANN_FN:
+	    _DATA_DIR + 'none'
     }
+    
+    
+        
 }

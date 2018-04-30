@@ -20,6 +20,10 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import matplotlib as mpl
+mpl.use('Agg')
+import matplotlib.pyplot as plt
+
 import json
 import logging
 import numpy as np
@@ -52,10 +56,10 @@ def evaluate_masks(
     _write_coco_segms_results_file(
         json_dataset, all_boxes, all_segms, res_file)
     # Only do evaluation on non-test sets (annotations are undisclosed on test)
-    if json_dataset.name.find('test') == -1:
-        coco_eval = _do_segmentation_eval(json_dataset, res_file, output_dir)
-    else:
-        coco_eval = None
+#     if json_dataset.name.find('test') == -1:
+    coco_eval = _do_segmentation_eval(json_dataset, res_file, output_dir)
+#     else:
+#         coco_eval = None
     # Optionally cleanup results json file
     if cleanup:
         os.remove(res_file)
@@ -113,7 +117,11 @@ def _coco_segms_results_one_category(json_dataset, boxes, segms, cat_id):
 
 def _do_segmentation_eval(json_dataset, res_file, output_dir):
     coco_dt = json_dataset.COCO.loadRes(str(res_file))
+    global type
+    type = 'segm'
     coco_eval = COCOeval(json_dataset.COCO, coco_dt, 'segm')
+    coco_eval.params.iouThrs = np.linspace(.5, 1.0, np.round((1.0 - .5) / .05) + 1, endpoint=True)
+
     coco_eval.evaluate()
     coco_eval.accumulate()
     _log_detection_eval_metrics(json_dataset, coco_eval)
@@ -134,10 +142,10 @@ def evaluate_boxes(
     res_file += '.json'
     _write_coco_bbox_results_file(json_dataset, all_boxes, res_file)
     # Only do evaluation on non-test sets (annotations are undisclosed on test)
-    if json_dataset.name.find('test') == -1:
-        coco_eval = _do_detection_eval(json_dataset, res_file, output_dir)
-    else:
-        coco_eval = None
+#     if json_dataset.name.find('test') == -1:
+    coco_eval = _do_detection_eval(json_dataset, res_file, output_dir)
+#     else:
+#         coco_eval = None
     # Optionally cleanup results json file
     if cleanup:
         os.remove(res_file)
@@ -190,7 +198,11 @@ def _coco_bbox_results_one_category(json_dataset, boxes, cat_id):
 
 def _do_detection_eval(json_dataset, res_file, output_dir):
     coco_dt = json_dataset.COCO.loadRes(str(res_file))
+    global type
+    type = 'bbox'
+
     coco_eval = COCOeval(json_dataset.COCO, coco_dt, 'bbox')
+    coco_eval.params.iouThrs = np.linspace(.5, 1.0, np.round((1.0 - .5) / .05) + 1, endpoint=True)
     coco_eval.evaluate()
     coco_eval.accumulate()
     _log_detection_eval_metrics(json_dataset, coco_eval)
@@ -202,36 +214,105 @@ def _do_detection_eval(json_dataset, res_file, output_dir):
 
 def _log_detection_eval_metrics(json_dataset, coco_eval):
     def _get_thr_ind(coco_eval, thr):
+    	#print(coco_eval.params.iouThrs)
+    	#print((coco_eval.params.iouThrs > thr - 1e-5) & (coco_eval.params.iouThrs < thr + 1e-5))
         ind = np.where((coco_eval.params.iouThrs > thr - 1e-5) &
                        (coco_eval.params.iouThrs < thr + 1e-5))[0][0]
         iou_thr = coco_eval.params.iouThrs[ind]
+        #print(iou_thr, thr)
         assert np.isclose(iou_thr, thr)
         return ind
 
     IoU_lo_thresh = 0.5
-    IoU_hi_thresh = 0.95
+    IoU_hi_thresh = 1.0
     ind_lo = _get_thr_ind(coco_eval, IoU_lo_thresh)
     ind_hi = _get_thr_ind(coco_eval, IoU_hi_thresh)
     # precision has dims (iou, recall, cls, area range, max dets)
     # area range index 0: all area ranges
     # max dets index 2: 100 per image
-    precision = coco_eval.eval['precision'][ind_lo:(ind_hi + 1), :, :, 0, 2]
+    precision = coco_eval.eval['precision'][ind_lo, :, :, 0, 2]
+    
     ap_default = np.mean(precision[precision > -1])
     logger.info(
-        '~~~~ Mean and per-category AP @ IoU=[{:.2f},{:.2f}] ~~~~'.format(
-            IoU_lo_thresh, IoU_hi_thresh))
+        '~~~~ Mean and per-category AP @ IoU={:.2f} ~~~~'.format(
+            IoU_lo_thresh))
     logger.info('{:.1f}'.format(100 * ap_default))
+    
+    # plotting code
+    #catNms =['myleft', 'myright', 'yourleft', 'yourright']
+    #print('------------')
+    #print(json_dataset.COCO.getCatIds())
+    cid = json_dataset.COCO.getCatIds()
+    #print(json_dataset.COCO.loadCats(cid))
+    #print([c['supercategory'] for c in json_dataset.COCO.loadCats(cid)])
+    supCat = [c['supercategory'] for c in json_dataset.COCO.loadCats(cid)]
+    subCat = json_dataset.classes[1:]
+    
+    #print(["{}_{}".format(supCat_, subCat_) for supCat_,  subCat_ in zip(supCat, subCat)])
+    catNms =["{}_{}".format(supCat_, subCat_) for supCat_,  subCat_ in zip(supCat, subCat)]
+    catNms =subCat
+    fig = plt.figure()
+    fig.set_figheight(8)
+    fig.set_figwidth(6)
+    
+    
+    
+    
+    ax = fig.add_subplot(1,1,1)
+    #ax2 = fig.add_subplot(2,1,2)
+    ax.set_xlabel("recall")
+    ax.set_ylabel("precision")
+
+    ax.set_axisbelow(True)
+    # Turn on the minor TICKS, which are required for the minor GRID
+    ax.minorticks_on()
+    # Customize the major grid
+    ax.grid(which='major', linestyle=':', linewidth='0.5')
+    # Customize the minor grid
+    ax.grid(which='minor', linestyle=':', linewidth='0.5')
+    
+    
+
+    ax.plot([],[],'',label='mAP: '+ str(round(ap_default,3)),color='white')
+    #plt.grid(ls=':')
     for cls_ind, cls in enumerate(json_dataset.classes):
         if cls == '__background__':
             continue
         # minus 1 because of __background__
         precision = coco_eval.eval['precision'][
-            ind_lo:(ind_hi + 1), :, cls_ind - 1, 0, 2]
+            ind_lo, :, cls_ind - 1, 0, 2]
+        
+		# for custom dataset we don't need the ceiling threshold
+#         precision = coco_eval.eval['precision'][
+#             ind_lo, :, cls_ind - 1, 0, 2]
+        #print(precision)
         ap = np.mean(precision[precision > -1])
+        #print(coco_eval.params.recThrs.shape)
+        #print(precision)
+        ax.plot(coco_eval.params.recThrs,precision,label= catNms[cls_ind -1] +' | AP: '+ str(round(ap,3)) )
+        ax.legend(loc=3,ncol=1)	
+        
         logger.info('{:.1f}'.format(100 * ap))
+    
+    
+    ax.legend(loc=3,ncol=1)	
+    #ax2.set_xlabel("recall")
+    #ax2.set_ylabel("precision")
+    #ax2.set_axisbelow(True)
+    # Turn on the minor TICKS, which are required for the minor GRID
+    #ax2.minorticks_on()
+    # Customize the major grid
+    #ax2.grid(which='major', linestyle=':', linewidth='0.5')
+    # Customize the minor grid
+    #ax2.grid(which='minor', linestyle=':', linewidth='0.5')
+    #ax2.plot(coco_eval.params.recThrs,precision,label= 'All Hands | AP: '+ str(round(ap_default,3)) )
+    #ax2.legend(loc=3,ncol=1)
+    plt.tight_layout()	
+    file_dir = 'plots/pr_{}_{}.png'.format(json_dataset.name,type)
+    fig.savefig(file_dir)
     logger.info('~~~~ Summary metrics ~~~~')
     coco_eval.summarize()
-
+    #print(coco_eval.stats[1])
 
 def evaluate_box_proposals(
     json_dataset, roidb, thresholds=None, area='all', limit=None
