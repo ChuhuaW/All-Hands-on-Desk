@@ -86,7 +86,8 @@ def vis(dataset, detections_pkl, thresh, output_dir, limit=0):
 
     with open(detections_pkl, 'r') as f:
         dets = pickle.load(f)
-
+	#print(dets.keys())
+	#print(ds.COCO.dataset['categories'])
     assert all(k in dets for k in ['all_boxes', 'all_segms', 'all_keyps']), \
         'Expected detections pkl file in the format used by test_engine.py'
 

@@ -89,9 +89,18 @@ def convert_from_cls_format(cls_boxes, cls_segms, cls_keyps):
 
 
 def get_class_string(class_index, score, dataset):
-    class_text = dataset.classes[class_index] if dataset is not None else \
-        'id{:d}'.format(class_index)
-    return class_text + ' {:0.2f}'.format(score).lstrip('0')
+	classall=['myleft','myright','yourleft','yourright']
+#     class_text = dataset.classes[class_index] if dataset is not None else \
+#         'id{:d}'.format(class_index)
+	class_text = classall[class_index-1]
+    #print(dataset.COCO.getCatIds())
+    #cid = dataset.COCO.getCatIds()[class_index-1]
+    #print(dataset.COCO.loadCats(cid)[0]['supercategory'])
+    #supCat = dataset.COCO.loadCats(cid)[0]['supercategory']
+#     if supCat:
+#     	return supCat +'\n'+ class_text + ' {:0.2f}'.format(score).lstrip('0')
+#     else:
+	return class_text + ' {:0.2f}'.format(score).lstrip('0')
 
 
 def vis_mask(img, mask, col, alpha=0.4, show_border=True, border_thick=1):
@@ -251,7 +260,7 @@ def vis_one_image_opencv(
 def vis_one_image(
         im, im_name, output_dir, boxes, segms=None, keypoints=None, thresh=0.9,
         kp_thresh=2, dpi=200, box_alpha=0.0, dataset=None, show_class=False,
-        ext='pdf'):
+        ext='png'):
     """Visual debugging of detections."""
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -302,9 +311,9 @@ def vis_one_image(
 
         if show_class:
             ax.text(
-                bbox[0], bbox[1] - 2,
+                bbox[0]+100, bbox[1] +100,
                 get_class_string(classes[i], score, dataset),
-                fontsize=3,
+                fontsize='x-large',
                 family='serif',
                 bbox=dict(
                     facecolor='g', alpha=0.4, pad=0, edgecolor='none'),
