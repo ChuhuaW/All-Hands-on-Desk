@@ -11,3 +11,6 @@ In order to reproduce the results, you will need to install Caffe2 and Detectron
 
 The [dataset](https://iu.box.com/s/13npqzwecxq6g1l5ayutxvbu0p9znmd1) and [model](https://iu.box.com/s/l1mz1sad35no6mgkibicrpmcy2un6kt3) files are uploaded to my IU Box due to their size. When download is complete, please move datasets under the directory to '/lib/datasets/data/egohands_data'
 
+## License
+
+Detectron is released under the [Apache 2.0 license](https://github.com/facebookresearch/detectron/blob/master/LICENSE). See the [NOTICE](https://github.com/facebookresearch/detectron/blob/master/NOTICE) file for additional details.
